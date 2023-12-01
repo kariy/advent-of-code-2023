@@ -1,8 +1,10 @@
 advent_of_code::solution!(1);
 
+use std::iter::Iterator;
 use std::str::FromStr;
 
-use regex::Regex;
+// use regex::{Regex, RegexSet};
+use fancy_regex::Regex;
 
 pub fn part_one(input: &str) -> Option<u32> {
     let mut values: Vec<u32> = vec![];
@@ -36,15 +38,15 @@ pub fn part_two(input: &str) -> Option<u32> {
             digit
         } else {
             match word {
-                "one" => 1,
-                "two" => 2,
-                "three" => 3,
-                "four" => 4,
-                "five" => 5,
-                "six" => 6,
-                "seven" => 7,
-                "eight" => 8,
-                "nine" => 9,
+                "n" => 1,
+                "w" => 2,
+                "hre" => 3,
+                "ou" => 4,
+                "iv" => 5,
+                "i" => 6,
+                "eve" => 7,
+                "igh" => 8,
+                "in" => 9,
                 _ => {
                     panic!("invalid")
                 }
@@ -52,13 +54,12 @@ pub fn part_two(input: &str) -> Option<u32> {
         }
     }
 
-    let regex = Regex::new(r"[0-9]|(one)|(two)|(three)|(four)|(five)|(six)|(seven)|(eight)|(nine)")
+    let regex = Regex::new(r"[0-9]|(?<=o)n(?=e)|(?<=t)w(?=o)|(?<=t)hre(?=e)|(?<=f)ou(?=r)|(?<=f)iv(?=e)|(?<=s)i(?=x)|(?<=s)eve(?=n)|(?<=e)igh(?=t)|(?<=n)in(?=e)")
         .unwrap();
 
     let mut sum = 0;
-
     for line in input.lines() {
-        let matches: Vec<&str> = regex.find_iter(line).map(|m| m.as_str()).collect();
+        let matches: Vec<&str> = regex.find_iter(line).map(|m| m.unwrap().as_str()).collect();
 
         let first = parse_digit_str(matches.first().unwrap());
         let last = parse_digit_str(matches.last().unwrap());
